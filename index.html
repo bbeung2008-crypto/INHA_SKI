@@ -303,9 +303,11 @@ function mobileHome(){
 
 // ===== v21 Google Sheets 회원관리 =====
 // 아래 URL은 Google Apps Script 배포 후 받은 /exec 주소를 넣으세요.
-const MEMBER_API_URL = '';
+const MEMBER_API_URL = 'https://script.google.com/macros/s/AKfycbyfZC8H5xKNkl8q3lMRs_hriYxLA08I21rteH8e29-kCvI9NKU6VrsGR7wr8oMQBhXW-A/exec';
+const ABSENCE_API_URL = MEMBER_API_URL;
 
 let memberData = [];
+let absenceData = [];
 const EQUIP_KEYS = ['헬멧','고글','스키복','폴','플레이트','부츠','부츠백','플레이트백'];
 
 function pick(row, keys){
@@ -355,6 +357,44 @@ async function loadMembers(){
     renderMembers();
   }catch(e){
     if(status) status.textContent='불러오기 실패: '+e.message;
+  }
+}
+
+  async function loadAbsenceData(){
+  try{
+    if(!ABSENCE_API_URL){
+      console.log('ABSENCE_API_URL이 없습니다.');
+      return;
+    }
+
+    const res = await fetch(ABSENCE_API_URL, {
+      cache:'no-store'
+    });
+
+    if(!res.ok){
+      throw new Error('HTTP ' + res.status);
+    }
+
+    const data = await res.json();
+    const rows = Array.isArray(data) ? data : (data.rows || []);
+
+    absenceData = rows.map(r => ({
+      name: pick(r, ['이름']),
+      student: pick(r, ['학번']),
+      absence: pick(r, [
+        '합숙 불참 날짜',
+        '시즌 불참일',
+        '불참 날짜',
+        '불참일'
+      ])
+    }));
+
+    console.log('시즌 불참 데이터 연결 완료:', absenceData.length + '명');
+
+    renderAbsenceSummary();
+
+  }catch(e){
+    console.error('시즌 불참 데이터 불러오기 실패:', e);
   }
 }
 function renderMembers(){
