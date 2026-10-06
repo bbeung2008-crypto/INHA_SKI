@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bbeung2008-crypto.github.io/INHA_SKI/sitemap.xml
