@@ -278,8 +278,7 @@ const SUPABASE_PUBLISHABLE_KEY='sb_publishable_wuj41nPM8ImzDEA00W664g_iEl7s7c3';
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const OFFSEASON_FORM_URL='';let role='신입생';let loggedIn=false;let currentUser=null;let currentProfile=null;
 function openOffseasonForm(){}
-window.open(OFFSEASON_FORM_URL,'_blank','noopener');
-}async function supabaseLogin(){
+async function supabaseLogin(){
  const email=document.getElementById('authEmail').value.trim(); const password=document.getElementById('authPassword').value; const msg=document.getElementById('authMessage');
  if(!email||!password){msg.textContent='이메일과 비밀번호를 입력해주세요.';return;}
  msg.textContent='로그인 확인 중...';
@@ -361,8 +360,8 @@ async function loadPendingMembers(){
     d.innerHTML='<b>'+escHtml(m.name||'이름 미입력')+'</b> <span class="badge">승인 대기</span>'+
       '<div class="muted">'+escHtml(m.student_no||'-')+' · '+escHtml(m.department||'-')+' · '+escHtml(m.generation||'-')+
       ' · '+escHtml(m.member_type==='member'?'재학생':'신입생')+' · 스키 '+escHtml(m.ski_level||'-')+'</div>'+
-      '<div class="actions"><button class="small primary" onclick="approveMember(\\''+m.id+'\\')">승인</button>'+
-      '<button class="small" onclick="rejectMember(\\''+m.id+'\\')">거절</button></div>';
+      '<div class="actions"><button class="small primary" onclick="approveMember(\''+m.id+'\')">승인</button>'+
+      '<button class="small" onclick="rejectMember(\''+m.id+'\')">거절</button></div>';
     box.appendChild(d);
   });
 }
@@ -421,9 +420,9 @@ async function loadOffseasonEvents(){
     card.innerHTML='<h3 style="margin:0 0 6px">'+escHtml(e.title)+'</h3>'+
       '<div class="muted">'+new Date(e.event_date).toLocaleString('ko-KR')+(e.location?' · '+escHtml(e.location):'')+'</div>'+
       (e.description?'<p style="white-space:pre-wrap">'+escHtml(e.description)+'</p>':'')+
-      '<div class="actions"><button class="small '+(mine?.response==='attending'?'primary':'')+'" onclick="respondEvent(\\''+e.id+'\\',\\'attending\\')">참석</button>'+
-      '<button class="small '+(mine?.response==='not_attending'?'primary':'')+'" onclick="respondEvent(\\''+e.id+'\\',\\'not_attending\\')">불참</button>'+
-      '<button class="small '+(mine?.response==='undecided'?'primary':'')+'" onclick="respondEvent(\\''+e.id+'\\',\\'undecided\\')">미정</button></div>'+
+      '<div class="actions"><button class="small '+(mine?.response==='attending'?'primary':'')+'" onclick="respondEvent(\''+e.id+'\',\'attending\')">참석</button>'+
+      '<button class="small '+(mine?.response==='not_attending'?'primary':'')+'" onclick="respondEvent(\''+e.id+'\',\'not_attending\')">불참</button>'+
+      '<button class="small '+(mine?.response==='undecided'?'primary':'')+'" onclick="respondEvent(\''+e.id+'\',\'undecided\')">미정</button></div>'+
       (isTeamAdmin()?'<div class="event-meta"><span class="badge">참석 '+counts.attending+'</span><span class="badge">불참 '+counts.not_attending+'</span><span class="badge">미정 '+counts.undecided+'</span><span class="muted">응답 '+total+'명</span></div>':'');
     box.appendChild(card);
   }
